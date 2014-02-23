@@ -122,8 +122,6 @@ public class Main {
 
 	private static void train() {
 
-		System.out.println("\nError results for " +  algorithmName + "\n---------------------------");
-
 		for(int i = 0; i < numIterations; i++) {
 			algo.train();
 
@@ -138,8 +136,6 @@ public class Main {
 				example.setLabel(new Instance(Double.parseDouble(network.getOutputValues().toString())));
 				error += measure.value(output, example);
 			}
-
-			System.out.println(df.format(error));
 		}
 	}
 
