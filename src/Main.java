@@ -66,7 +66,7 @@ public class Main {
 
 		//get the dataset
 		dataSet = DataHandler.getDataSet(fileName, numInstances);
-		
+
 		//run the ann
 		network = factory.createClassificationNetwork(new int[] {inputLayerSize, hiddenLayerSize, outputLayerSize});
 		optProb = new NeuralNetworkOptimizationProblem(dataSet, network, measure);
@@ -76,7 +76,7 @@ public class Main {
 			printHelp();
 			return;
 		}
-		
+
 		double trainingTime;
 		double testingTime;
 		double correct = 0;
@@ -103,7 +103,7 @@ public class Main {
 
 			if (Math.abs(predicted - actual) < 0.5) {
 				correct++;
-			
+
 			} else {
 				incorrect++;
 			}
@@ -136,6 +136,9 @@ public class Main {
 				example.setLabel(new Instance(Double.parseDouble(network.getOutputValues().toString())));
 				error += measure.value(output, example);
 			}
+
+			// System.out.println("Iteration " + i + " Error : " + df.format(error));
+			System.out.println(df.format(error));
 		}
 	}
 
@@ -144,11 +147,11 @@ public class Main {
 		OptimizationAlgorithm ret = null;
 
 		if (algorithmName.equals("-RHC")) {
-			
+
 			if(args.length != 7) {
 				return null;
 			}
-			
+
 			ret = new RandomizedHillClimbing(optProb);
 
 		} else if (algorithmName.equals("-SA")) {
