@@ -28,7 +28,7 @@ public abstract class TravelingSalesmanEvaluationFunction implements EvaluationF
             }
         }
     }
-    
+
     /**
      * Get the distance between two points
      * @param i the first point

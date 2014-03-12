@@ -52,11 +52,11 @@ public class DataHandler {
 
 			for(int i = 0; i < numInstances; i++){
 				st = in.readLine().split("[,]");
-				
+
 				if(missing == null){
 					missing = new boolean[st.length - 1];
 				}
-				
+
 				attr[i] = new double[2][];
 				attr[i][0] = new double[st.length - 1];
 				attr[i][1] = new double[1];
@@ -71,7 +71,7 @@ public class DataHandler {
 					}
 				}
 
-				attr[i][1][0] = Double.parseDouble(st[st.length - 1]);	
+				attr[i][1][0] = Double.parseDouble(st[st.length - 1]);
 			}
 
 			//handle unknowns by assinging them the average
@@ -103,7 +103,7 @@ public class DataHandler {
 		for (int i = 0; i < numInstances; i++) {
 			instances[i] = new Instance(attr[i][0]);
 			//TODO make a bundle of splitting functions
-			instances[i].setLabel(new Instance(attr[i][1][0] < 8 ? 0 : 1));
+			instances[i].setLabel(new Instance(attr[i][1][0] > 8 ? 1 : 0));
 		}
 
 		return new DataSet(instances);
