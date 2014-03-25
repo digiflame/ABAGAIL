@@ -25,7 +25,7 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
      * The reverse projection
      */
     private Matrix reverseProjection;
-    
+
     /**
      * The pca preprocessing filter
      */
@@ -38,7 +38,7 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
     public IndependentComponentAnalysis(DataSet dataSet) {
         this(dataSet, -1);
     }
-    
+
     /**
      * Make a new ICA filter
      * @param dataSet the set form which to estimate components
@@ -48,7 +48,7 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
         this(dataSet, numberOfComponents, 1.0,
             new HyperbolicTangentContrast(), .00001, 1000);
     }
-    
+
     /**
      * Make a new ICA filter
      * @param dataSet the set form which to estimate components
@@ -65,13 +65,13 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
             copy[i] = (Instance) dataSet.get(i).copy();
         }
         dataSet = new DataSet(copy);
-        
+
         if (numberOfComponents == -1) {
             numberOfComponents = copy[0].size();
         }
-        
+
         // perform pca and whitening
-        pca = new PrincipalComponentAnalysis(dataSet);      
+        pca = new PrincipalComponentAnalysis(dataSet);
         pca.filter(dataSet);
         MultivariateGaussian mg = new MultivariateGaussian();
         mg.estimate(dataSet);
@@ -82,11 +82,11 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
             Instance instance = dataSet.get(i);
             instance.setData(whiteningMatrix.times(instance.getData()));
         }
-        
+
         // make the w matrix out of random orthonormal stuff
         RandomizedProjectionFilter rpf = new RandomizedProjectionFilter(whiteningMatrix.m(), numberOfComponents);
         Matrix w = rpf.getProjection();
-        
+
         // do the damn thing
         boolean done = false;
         int iterations = 0;
@@ -123,7 +123,7 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
                 w.setColumn(i, wv);
             }
             // do the symmetric eigenvalue decomposition on w*wt
-            SymmetricEigenvalueDecomposition sed = 
+            SymmetricEigenvalueDecomposition sed =
                 new SymmetricEigenvalueDecomposition(w.transpose().times(w));
             // deccorolate the thing
             w = w.times(sed.getU().times(sed.getD().inverse().squareRoot()
@@ -139,7 +139,7 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
         }
         // make the projection and reverse projections
         projection = w.transpose().times(whiteningMatrix);
-        reverseProjection = dewhiteningMatrix.times(w);      
+        reverseProjection = dewhiteningMatrix.times(w);
     }
 
     /**
@@ -151,10 +151,10 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
             Instance instance = dataSet.get(i);
             instance.setData(projection.times(instance.getData()));
         }
-        
+
         dataSet.setDescription(new DataSetDescription(dataSet));
     }
-    
+
     /**
      * @see shared.filt.ReversibleFilter#reverse(shared.DataSet)
      */
@@ -166,8 +166,8 @@ public class IndependentComponentAnalysis implements ReversibleFilter {
         pca.reverse(dataSet);
         dataSet.setDescription(new DataSetDescription(dataSet));
     }
-    
-    
+
+
 
     /**
      * Get the pca filter
