@@ -35,6 +35,8 @@ public class ICA {
         filter.filter(set);
 
 		out = new PrintWriter(args[4] + "/afterICA.txt");
+		System.out.println("number of instances " + set.size());
+		System.out.println("number of attributes " + set.get(0).size());
 		out.println(set);
 		out.flush();
 		out.close();
